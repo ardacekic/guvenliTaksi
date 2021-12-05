@@ -3,18 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/user/AndroidStudioProjects/MapsApp/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/MapsApp/app/src/main/res/layout/activity_maps.xml" value="0.33" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/MapsApp/app/src/main/res/layout/activity_pop.xml" value="0.3625" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/MapsApp/app/src/main/res/layout/activity_qr_reader.xml" value="0.41041666666666665" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/MapsApp/app/src/main/res/layout/activity_register.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/button_giris.xml" value="0.3411458333333333" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/edittext_email.xml" value="0.2015625" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/edittext_password.xml" value="0.32037037037037036" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/ic_email.xml" value="0.2015625" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2015625" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/ic_password.xml" value="0.32037037037037036" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_register.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/build/classes" />
-  </component>
-  <component name="ProjectType">
-    <option name="id" value="Android" />
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
