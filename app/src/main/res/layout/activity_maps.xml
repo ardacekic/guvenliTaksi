@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-
     <Button
         android:id="@+id/call_Taxi_Button"
         android:layout_width="140dp"
@@ -28,6 +27,7 @@
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         tools:context=".MapsActivity" />
+
 
     <Button
         android:id="@+id/nearest_Taxi_Button"

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,12 +34,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected LocationListener locationListener;
     public Button show_nearestTaxi,call_Taxi_Button,taxi_come_Button;
     protected Double latitude,longitude;
+    private TextView filter;
     public boolean clicked = false;
     public String message_intent="Taksi Çağır";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        filter = findViewById(R.id.textView);
 
         show_nearestTaxi = findViewById(R.id.nearest_Taxi_Button);
         show_nearestTaxi.setOnClickListener(this);
@@ -127,6 +130,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 call_Taxi_Button.setText(name_leaf);
                 show_nearestTaxi.setText(name_node);
                 taxi_come_Button.setText(plate);
+
+                //artık filtre özelliği kapanacak ve ses kaydı özelliği açılacak
+                filter.setVisibility(View.INVISIBLE);
                 //TODO: FRONT-END HAZIRLANINCA BURAYI RESULT OLARAK DÖNDÜRÜCEZ DEBUG İÇİN YETERLİ
             }else {
 

@@ -1,7 +1,9 @@
 package com.example.mapsapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +11,10 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,22 +30,41 @@ import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private Button login_button,signin_button;
+    private Button login_button,signin_button,deneme;
     private EditText username_text,password_text;
+
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+    private static final int MY_ACCESS_COARSE_LOCATION_CODE = 200;
+    private static final int MY_ACCESS_FINE_LOCATION_CODE = 300;
+    private static final int MY_ACCESS_BACKGROUND_LOCATION_CODE = 400;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        checkPermissons();
         login_button = findViewById(R.id.login_button);
         login_button.setOnClickListener(this);
 
         signin_button = findViewById(R.id.signin_button);
         signin_button.setOnClickListener(this);
 
+        deneme = findViewById(R.id.deneme);
+        deneme.setOnClickListener(this);
         username_text = findViewById(R.id.username_text);
         password_text = findViewById(R.id.password_text);
+    }
+
+    private void checkPermissons() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_ACCESS_COARSE_LOCATION_CODE);
+        }
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION_CODE);
+        }
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
     }
 
     private void openRegisterScreen() {
@@ -53,8 +78,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void loginUser() {
         final String username = username_text.getText().toString().trim();
         final String password = password_text.getText().toString().trim();
-        Log.i("loginuser",Constants.URL_REGISTER);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_REGISTER, new Response.Listener<String>() {
+        Log.i("loginuser",Constants.URL_LOGIN);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{
@@ -88,6 +113,38 @@ public class MainActivity extends Activity implements View.OnClickListener {
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == MY_ACCESS_COARSE_LOCATION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "location permission granted", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "location permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == MY_ACCESS_FINE_LOCATION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "location - Fine permission granted", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "location - Fine permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == MY_ACCESS_BACKGROUND_LOCATION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "background location permission granted", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "background location permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    @Override
     public void onClick(View v) {
         if(v == login_button){;
             Log.i("click","clicked");
@@ -95,6 +152,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             loginUser();
         }else if(v == signin_button){
             openRegisterScreen();
+        }else if(v== deneme){
+            Intent intent = new Intent(this,deneme.class);
+            startActivity(intent);
         }
     }
 }

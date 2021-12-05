@@ -23,9 +23,12 @@
         android:theme="@style/Theme.MapsApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".deneme"
+            android:exported="false" />
+        <activity
             android:name=".Pop"
-            android:theme="@style/Theme.MapsApp.CustomTheme"
-            android:exported="false"/>
+            android:exported="false"
+            android:theme="@style/Theme.MapsApp.CustomTheme" />
         <activity
             android:name=".QrReader"
             android:exported="false" />
