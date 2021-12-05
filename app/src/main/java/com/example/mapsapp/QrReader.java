@@ -1,8 +1,10 @@
 package com.example.mapsapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -14,9 +16,15 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class QrReader extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     private TextView  textBox;
+    public static final String EXTRA_INFO_NODE= "com.example.mapsapp.EXTRA_INFO_NODE";
+    public static final String EXTRA_INFO_LEAF= "com.example.mapsapp.EXTRA_INFO_LEAF";
+    public static final String EXTRA_INFO_PLATE= "com.example.mapsapp.EXTRA_INFO_PLATE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +41,21 @@ public class QrReader extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(), result.getText(), Toast.LENGTH_SHORT).show();
-                        textBox.setText(result.getText());
-                        //TODO: BURAYA OKUNMA İŞLEMİNİN BAŞARILMASI GELECEK
+                        try {
+                            JSONObject jsonObject = new JSONObject(result.toString());
+                            String name_node = jsonObject.getString("name_node");
+                            String name_leaf = jsonObject.getString("name_leaf");
+                            String plate = jsonObject.getString("plate");
+
+                            Intent go_backto_userMain = new Intent();
+                            go_backto_userMain.putExtra(EXTRA_INFO_NODE,name_node);
+                            go_backto_userMain.putExtra(EXTRA_INFO_LEAF,name_leaf);
+                            go_backto_userMain.putExtra(EXTRA_INFO_PLATE,plate);
+                            setResult(RESULT_OK,go_backto_userMain);
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -58,4 +79,6 @@ public class QrReader extends AppCompatActivity {
         mCodeScanner.releaseResources();
         super.onPause();
     }
+
+
 }

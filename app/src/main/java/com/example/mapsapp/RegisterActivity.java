@@ -41,7 +41,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         registerButton    = findViewById(R.id.register_button);
         registerButton.setOnClickListener(this);
     }
-
     private void registerUser() {
         final String username = username_EditText.getText().toString().trim();
         final String password = password_EditText.getText().toString().trim();
@@ -84,9 +83,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 return params;
             }
         };
-
-        /*RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(stringRequest);*/
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 
