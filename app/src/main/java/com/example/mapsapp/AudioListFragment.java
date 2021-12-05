@@ -59,6 +59,7 @@ public class AudioListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //TODO: KAYBOLMAYA ÇÖZÜM :https://www.youtube.com/watch?v=DCY4N6fe95s&ab_channel=TVACStudio, PART5
         return inflater.inflate(R.layout.fragment_audio_list, container, false);
     }
 }

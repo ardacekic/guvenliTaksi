@@ -55,6 +55,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         password_text = findViewById(R.id.password_text);
     }
 
+    //TODO:RECORD AUDIO PERMISSON CHECK GELECEK!
     private void checkPermissons() {
         if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_ACCESS_COARSE_LOCATION_CODE);
@@ -153,7 +154,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }else if(v == signin_button){
             openRegisterScreen();
         }else if(v== deneme){
-            Intent intent = new Intent(this,deneme.class);
+            Intent intent = new Intent(this,RecorderActivity.class);
             startActivity(intent);
         }
     }

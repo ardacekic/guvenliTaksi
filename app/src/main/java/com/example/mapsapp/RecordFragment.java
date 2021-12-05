@@ -1,17 +1,41 @@
 package com.example.mapsapp;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,8 +44,15 @@ import android.widget.ImageView;
  */
 public class RecordFragment extends Fragment implements View.OnClickListener {
 
+    private static final int PERMISSON_CODE = 600;
     private NavController navController;
     private ImageView list_btn;
+    private ImageButton record_btn;
+    private boolean isRecording = false;
+    private String recordPermisson = Manifest.permission.RECORD_AUDIO;
+    private MediaRecorder mediaRecorder;
+    private String recordFile;
+    private Chronometer recordTimer;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,6 +91,11 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    private FragmentManager getSupportFragmentManager() {
+        return null;
     }
 
     @Override
@@ -68,6 +104,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         navController = Navigation.findNavController(view);
         list_btn = view.findViewById(R.id.record_list_ptn);
         list_btn.setOnClickListener(this);
+        record_btn = view.findViewById(R.id.record_btn);
+        record_btn.setOnClickListener(this);
+        recordTimer = view.findViewById(R.id.record_timer);
     }
 
     @Override
@@ -79,10 +118,62 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.record_list_ptn:
                 navController.navigate(R.id.action_recordFragment_to_audioListFragment);
                 break;
+            case R.id.record_btn:
+                if(isRecording){
+                    //TODO YANMAYAN MIC ILE DEGISTIRME FONCSIYONU GELCEK CUNKU RECORDAN ÇIKILACAK
+                    stopRecording();
+                    isRecording = false;
+                }else{
+                    if(checkPermisson()){
+                        startRecording();
+                        //TODO YANAR DONERLI MIC ILE DEGISTIRME FONCSIYONU GELCEK CUNKU RECORDA BAŞLANDI
+                        isRecording = true;
+                    }
+                }
+                break;
         }
     }
+
+    private void startRecording() {
+        recordTimer.setBase(SystemClock.elapsedRealtime());
+        recordTimer.start();
+        String recordPath = getActivity().getExternalFilesDir("/").getAbsolutePath();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.CANADA);
+        Date now = new Date();
+
+        recordFile = "Record_" + formatter.format(now) + ".3gp";
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setOutputFile(recordPath + "/" + recordFile);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            mediaRecorder.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaRecorder.start();
+    }
+    private void stopRecording() {
+        recordTimer.stop();
+        mediaRecorder.stop();
+        mediaRecorder.release();
+        mediaRecorder = null;
+    }
+
+    private boolean checkPermisson() {
+        if(ActivityCompat.checkSelfPermission(getContext(),recordPermisson) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            ActivityCompat.requestPermissions(getActivity(), new String[]{recordPermisson},PERMISSON_CODE);
+            return false;
+        }
+
+    }
+
 }

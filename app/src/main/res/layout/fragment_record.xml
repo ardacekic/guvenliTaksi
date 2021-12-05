@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Chronometer
-        android:id="@+id/chronometer2"
+        android:id="@+id/record_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="182dp"
@@ -28,44 +28,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_record_1" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/record_btn"
-        android:layout_width="117dp"
-        android:layout_height="102dp"
+        android:layout_width="88dp"
+        android:layout_height="83dp"
         android:layout_marginStart="147dp"
         android:layout_marginTop="46dp"
         android:layout_marginEnd="147dp"
         android:layout_marginBottom="102dp"
-        android:src="@drawable/index"
+        android:backgroundTint="#00000000"
+        android:scaleType="fitStart"
+        android:src="@android:drawable/presence_audio_busy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chronometer2" />
+        app:layout_constraintTop_toBottomOf="@+id/record_timer"
+        app:layout_constraintVertical_bias="0.3" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/record_list_ptn"
-        android:layout_width="30dp"
-        android:layout_height="77dp"
+        android:layout_width="61dp"
+        android:layout_height="73dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="131dp"
         android:layout_marginEnd="104dp"
         android:layout_marginBottom="116dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="#00000000"
+        android:scaleType="centerInside"
         android:src="@drawable/list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/record_btn"
-        app:layout_constraintTop_toBottomOf="@+id/text_record_1" />
+        app:layout_constraintTop_toBottomOf="@+id/text_record_1"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="394dp"
-        android:layout_height="285dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
