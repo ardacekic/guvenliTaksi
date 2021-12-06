@@ -37,11 +37,13 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
     private AudioListAdapter audioListAdapter;
     private MediaPlayer mediaPlayer = null;
     private boolean isPlaying = false;
-    private  File filetoPlay;
+    private  File filetoPlay = null;
 
     private ImageButton playBtn;
     private TextView playerHeader,playerFilename;
-
+    private SeekBar playerSeekbar;
+    private Handler seekbarHandler;
+    private Runnable updateSeekBar;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -81,7 +83,7 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //TODO: KAYBOLMAYA ÇÖZÜM :https://www.youtube.com/watch?v=DCY4N6fe95s&ab_channel=TVACStudio, PART5
-
+        playerSeekbar = view.findViewById(R.id.player_seek_bar);
         playBtn = view.findViewById(R.id.player_play_button);
         playerHeader= view.findViewById(R.id.player_header_title);
         playerFilename = view.findViewById(R.id.player_file_name);
@@ -93,6 +95,39 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
         audioList.setHasFixedSize(true);
         audioList.setLayoutManager(new LinearLayoutManager(getContext()));
         audioList.setAdapter(audioListAdapter);
+        playBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPlaying){
+                    pauseAudio();
+                }else{
+                    if(filetoPlay != null){
+                        resumeAudio();
+                    }
+                }
+            }
+        });
+
+        playerSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                    pauseAudio();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(filetoPlay != null){
+                    int progress = seekBar.getProgress();
+                    mediaPlayer.seekTo(progress);
+                    resumeAudio();
+                }
+            }
+        });
 
     }
 
@@ -106,27 +141,40 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
     @Override
     public void onClickListener(File file, int position) {
         Log.d("Play LOG","File Playing : " + file.getName());
+        filetoPlay = file;
         if(isPlaying){
             stopAudio();
             isPlaying = false;
             playAudio(filetoPlay);
 
         }else{
-            filetoPlay = file;
-            playAudio(filetoPlay);
             isPlaying = true;
+            playAudio(filetoPlay);
         }
     }
 
     private void stopAudio() {
         //TODO: PLAY BUTTON OYNAR OLARAK DEĞIŞTIR KERDEEEŞ > OLARAK
-        playerHeader.setText("STOP");
+        playerHeader.setText("Durdur");
         isPlaying = false;
         mediaPlayer.stop();
+        seekbarHandler.removeCallbacks(updateSeekBar);
+    }
+    private void pauseAudio(){
+        //TODO: PLAY BUTTON OYNAR OLARAK DEĞIŞTIR KERDEEEŞ > OLARAK
+        mediaPlayer.pause();
+        isPlaying = false;
+        seekbarHandler.removeCallbacks(updateSeekBar);
+    }
+    private void resumeAudio(){
+        //TODO: PLAY BUTTON OYNAR OLARAK DEĞIŞTIR KERDEEEŞ > OLARAK
+        mediaPlayer.start();
+        isPlaying = true;
+        updateRunnable();
+        seekbarHandler.postDelayed(updateSeekBar,0);
     }
 
     private void playAudio(File filetoPlay) {
-
         mediaPlayer = new MediaPlayer();
         //TODO: botomsheetbehvour
         try {
@@ -138,14 +186,35 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
         }
         //TODO: PLAY BUTTON RENGINI FILAN DEGISTIR || OLARAK DEĞİŞTIR!
         playerFilename.setText(filetoPlay.getName());
-        playerHeader.setText("PLAYING...");
-        isPlaying = true;
+        playerHeader.setText("Oynatılıyor");
+        isPlaying=true;
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 stopAudio();
-                playerHeader.setText("FINISHED");
+                playerHeader.setText("Bitti");
             }
         });
+        playerSeekbar.setMax(mediaPlayer.getDuration());
+        seekbarHandler = new Handler();
+        updateRunnable();
+        seekbarHandler.postDelayed(updateSeekBar,0);
+    }
+
+    private void updateRunnable() {
+        updateSeekBar = new Runnable() {
+            @Override
+            public void run() {
+                playerSeekbar.setProgress(mediaPlayer.getCurrentPosition(),true);
+                seekbarHandler.postDelayed(this,50);
+            }
+        };
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(isPlaying)
+        stopAudio();
     }
 }

@@ -3,6 +3,8 @@ package com.example.mapsapp;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -108,7 +110,22 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.record_list_ptn:
-                navController.navigate(R.id.action_recordFragment_to_audioListFragment);
+                if(isRecording){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                    alertDialog.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isRecording = false;
+                           navController.navigate(R.id.action_recordFragment_to_audioListFragment);
+                        }
+                    });
+                    alertDialog.setNegativeButton("Hayır",null);
+                    alertDialog.setTitle("Kayıt Halen Sürmekte");
+                    alertDialog.setMessage("Kayıtı Durdurmak İster Misiniz?");
+                    alertDialog.create().show();
+                }else{
+                    navController.navigate(R.id.action_recordFragment_to_audioListFragment);
+                }
                 break;
             case R.id.record_btn:
                 if(isRecording){
@@ -164,4 +181,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(isRecording)
+        stopRecording();
+    }
 }
