@@ -57,7 +57,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/player_file_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -80,7 +80,7 @@
         android:background="@drawable/player_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/player_file_name"
         app:srcCompat="@android:drawable/ic_media_play" />
 
     <ImageButton
@@ -93,7 +93,7 @@
         android:background="@drawable/player_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/player_play_button"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/player_file_name"
         app:srcCompat="@android:drawable/ic_media_ff" />
 
     <ImageButton
@@ -106,10 +106,11 @@
         android:background="@drawable/player_bg"
         app:layout_constraintEnd_toStartOf="@+id/player_play_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/player_file_name"
         app:srcCompat="@android:drawable/ic_media_rew" />
 
     <SeekBar
+        android:id="@+id/player_seek_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"

@@ -19,14 +19,16 @@
     <fragment
         android:id="@+id/fragment_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="400dp"
-        android:layout_height="467dp"
+        android:layout_width="414dp"
+        android:layout_height="422dp"
+        android:layout_marginTop="20dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.996"
+        app:layout_constraintTop_toBottomOf="@+id/map2"
+        app:layout_constraintVertical_bias="1.0"
         app:navGraph="@navigation/nav_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
