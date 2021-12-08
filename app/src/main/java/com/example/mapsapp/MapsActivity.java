@@ -108,7 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }else if(v == taxi_come_Button){
             Log.i("resultintent", "onClick ");
             Intent intent_qrReader = new Intent(this,QrReader.class);
-            startActivityForResult(intent_qrReader,1);
+            startActivity(intent_qrReader);
         }
     }
 

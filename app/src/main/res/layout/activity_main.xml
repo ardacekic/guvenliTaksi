@@ -90,4 +90,14 @@
         app:layout_constraintStart_toEndOf="@+id/fragment_container"
         app:layout_constraintTop_toBottomOf="@+id/fragment_container" />
 
+    <Button
+        android:id="@+id/to_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="18dp"
+        android:text="qr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deneme" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

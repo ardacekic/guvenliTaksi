@@ -24,6 +24,9 @@
         android:theme="@style/Theme.MapsApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FileManager"
+            android:exported="false" />
+        <activity
             android:name=".RecorderActivity"
             android:exported="false" />
         <activity

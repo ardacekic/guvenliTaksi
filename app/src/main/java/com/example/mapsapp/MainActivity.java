@@ -27,7 +27,7 @@ import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private Button login_button,signin_button,deneme;
+    private Button login_button,signin_button,deneme,qr_btn;
     private EditText username_text,password_text;
 
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -48,6 +48,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         deneme = findViewById(R.id.deneme);
         deneme.setOnClickListener(this);
+
+        qr_btn = findViewById(R.id.to_qr);
+        qr_btn.setOnClickListener(this);
+
         username_text = findViewById(R.id.username_text);
         password_text = findViewById(R.id.password_text);
     }
@@ -152,6 +156,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             openRegisterScreen();
         }else if(v== deneme){
             Intent intent = new Intent(this,RecorderActivity.class);
+            startActivity(intent);
+        }else if(v ==qr_btn){
+            Intent intent = new Intent(this,QrReader.class);
             startActivity(intent);
         }
     }
