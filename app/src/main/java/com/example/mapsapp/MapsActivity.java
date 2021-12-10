@@ -38,14 +38,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_maps);
 
-        show_nearestTaxi = findViewById(R.id.nearest_Taxi_Button);
-        show_nearestTaxi.setOnClickListener(this);
-
         call_Taxi_Button = findViewById(R.id.call_Taxi_Button);
         call_Taxi_Button.setOnClickListener(this);
 
-        taxi_come_Button = findViewById(R.id.taxi_come_Button);
-        taxi_come_Button.setOnClickListener(this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

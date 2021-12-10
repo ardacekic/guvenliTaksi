@@ -6,61 +6,45 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
+
     <Button
         android:id="@+id/call_Taxi_Button"
-        android:layout_width="140dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="96dp"
+        android:layout_width="328dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/button_giris"
         android:text="Taksi Çağır"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.853"
+        map:layout_constraintHorizontal_bias="0.492"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toBottomOf="@+id/map" />
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="408dp"
-        android:layout_height="260dp"
-        android:layout_marginTop="1dp"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="64dp"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.333"
+        map:layout_constraintHorizontal_bias="0.533"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         tools:context=".MapsActivity" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:src="@drawable/top_layerr"
+        />
 
-    <Button
-        android:id="@+id/nearest_Taxi_Button"
-        android:layout_width="140dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="96dp"
-        android:text="En Yakın Taksi"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.154"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toBottomOf="@+id/map" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/maps_underlayout"
+        map:layout_constraintBottom_toBottomOf="parent"
+        />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="158dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="324dp"
-        android:text="Filitreler"
-        android:textAlignment="center"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.497"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toBottomOf="@+id/map" />
 
-    <Button
-        android:id="@+id/taxi_come_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="236dp"
-        android:text="Taksi Geldi"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.498"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toBottomOf="@+id/map" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

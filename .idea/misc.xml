@@ -4,13 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/button_giris.xml" value="0.3411458333333333" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/button_register.xml" value="0.2911111111111111" />
         <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/edittext_email.xml" value="0.2015625" />
         <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/edittext_password.xml" value="0.32037037037037036" />
         <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/ic_email.xml" value="0.2015625" />
         <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2015625" />
         <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/drawable/ic_password.xml" value="0.32037037037037036" />
-        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_maps.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_register.xml" value="0.22" />
+        <entry key="..\:/Users/tuyga/AndroidStudioProjects/guvenliTaksi/app/src/main/res/layout/activity_splash_screen.xml" value="0.14666666666666667" />
       </map>
     </option>
   </component>
