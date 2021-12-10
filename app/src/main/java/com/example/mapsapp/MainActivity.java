@@ -13,9 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -30,7 +27,7 @@ import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private Button login_button,signin_button,deneme;
+    private Button login_button,signin_button,deneme,qr_btn;
     private EditText username_text,password_text;
 
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -51,10 +48,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         deneme = findViewById(R.id.deneme);
         deneme.setOnClickListener(this);
+
+        qr_btn = findViewById(R.id.to_qr);
+        qr_btn.setOnClickListener(this);
+
         username_text = findViewById(R.id.username_text);
         password_text = findViewById(R.id.password_text);
     }
 
+    //TODO:RECORD AUDIO PERMISSON CHECK GELECEK!
     private void checkPermissons() {
         if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_ACCESS_COARSE_LOCATION_CODE);
@@ -153,7 +155,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }else if(v == signin_button){
             openRegisterScreen();
         }else if(v== deneme){
-            Intent intent = new Intent(this,deneme.class);
+            Intent intent = new Intent(this,RecorderActivity.class);
+            startActivity(intent);
+        }else if(v ==qr_btn){
+            Intent intent = new Intent(this,QrReader.class);
             startActivity(intent);
         }
     }

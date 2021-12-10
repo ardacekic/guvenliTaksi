@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FileManager">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/android_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/player_sheet"/>
+
+    <fragment
+        android:id="@+id/audioListFragment"
+        android:name="com.example.mapsapp.AudioListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:label="fragment_audio_list"
+        tools:layout="@layout/fragment_audio_list"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

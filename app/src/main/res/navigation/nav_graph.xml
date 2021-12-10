@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/recordFragment">
+    app:startDestination="@id/audioListFragment">
 
     <fragment
         android:id="@+id/recordFragment"
         android:name="com.example.mapsapp.RecordFragment"
         android:label="fragment_record"
-        tools:layout="@layout/fragment_record" >
-        <action
-            android:id="@+id/action_recordFragment_to_audioListFragment"
-            app:destination="@id/audioListFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_record" />
     <fragment
         android:id="@+id/audioListFragment"
         android:name="com.example.mapsapp.AudioListFragment"
         android:label="fragment_audio_list"
-        tools:layout="@layout/fragment_audio_list" />
+        tools:layout="@layout/fragment_audio_list" >
+        <action
+            android:id="@+id/action_audioListFragment_to_recordFragment"
+            app:destination="@id/recordFragment" />
+    </fragment>
 </navigation>

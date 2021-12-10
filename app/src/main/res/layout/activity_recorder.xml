@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recordFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".RecordFragment">
-
-
+    tools:context=".RecorderActivity">
+    <fragment
+        android:id="@+id/map2"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="408dp"
+        android:layout_height="260dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/text_record_1"
         android:layout_width="wrap_content"
@@ -47,31 +54,12 @@
         app:layout_constraintTop_toBottomOf="@+id/record_timer"
         app:layout_constraintVertical_bias="0.3" />
 
-    <ImageButton
-        android:id="@+id/record_list_ptn"
-        android:layout_width="61dp"
-        android:layout_height="73dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="131dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="116dp"
-        android:adjustViewBounds="true"
-        android:backgroundTint="#00000000"
-        android:scaleType="centerInside"
-        android:src="@drawable/list"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/record_btn"
-        app:layout_constraintTop_toBottomOf="@+id/text_record_1"
-        app:layout_constraintVertical_bias="1.0" />
-
     <TextView
         android:id="@+id/node_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="292dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -80,8 +68,8 @@
         android:id="@+id/leaf_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="292dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/node_name"
         app:layout_constraintTop_toTopOf="parent" />
@@ -90,11 +78,20 @@
         android:id="@+id/plate_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="292dp"
+        android:layout_marginEnd="44dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/go_records"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="158dp"
+        android:layout_marginTop="27dp"
+        android:text="Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/record_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
