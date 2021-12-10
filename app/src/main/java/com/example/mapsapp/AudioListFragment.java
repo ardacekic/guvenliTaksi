@@ -20,6 +20,9 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,8 +92,14 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
         playerFilename = view.findViewById(R.id.player_file_name);
         audioList = view.findViewById(R.id.android_list_view);
         String path =getActivity().getExternalFilesDir("/").getAbsolutePath();
+        Log.d("path",path);
         File directory = new File(path);
         allFiles = directory.listFiles();
+        ArrayList<File> arrayList = new ArrayList<File>(Arrays.asList(allFiles));
+        Collections.reverse(arrayList);
+        for (int i = 0; i<arrayList.size();i++){
+            allFiles[i]=arrayList.get(i);
+        }
         audioListAdapter = new AudioListAdapter(allFiles,this);
         audioList.setHasFixedSize(true);
         audioList.setLayoutManager(new LinearLayoutManager(getContext()));

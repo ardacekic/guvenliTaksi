@@ -20,6 +20,10 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.Audi
         this.onItemListClick = onItemListClick;
     }
 
+    public AudioListAdapter() {
+
+    }
+
 
     @NonNull
     @Override

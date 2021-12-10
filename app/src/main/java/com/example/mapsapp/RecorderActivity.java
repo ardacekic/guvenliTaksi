@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -135,6 +137,7 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
                             //TODO GO TO FILE MANAGER
                             Intent intent = new Intent(getApplicationContext(),FileManager.class);
                             startActivity(intent);
+
                         }
                     });
                     alertDialog.setNegativeButton("Hayır",null);
@@ -151,6 +154,7 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
         recordTimer.setBase(SystemClock.elapsedRealtime());
         recordTimer.start();
         String recordPath = getExternalFilesDir("/").getAbsolutePath();
+        Log.d("record_Path",recordPath);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.CANADA);
         Date now = new Date();
 

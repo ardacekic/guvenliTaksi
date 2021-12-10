@@ -13,4 +13,12 @@
 
     <include layout="@layout/player_sheet"/>
 
+    <fragment
+        android:id="@+id/audioListFragment"
+        android:name="com.example.mapsapp.AudioListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:label="fragment_audio_list"
+        tools:layout="@layout/fragment_audio_list"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
