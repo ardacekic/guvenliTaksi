@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,7 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         checkPermissons();
         login_button = findViewById(R.id.login_button);
         login_button.setOnClickListener(this);
-
+        toBlink();
         signin_button = findViewById(R.id.signin_button);
         signin_button.setOnClickListener(this);
 
@@ -161,5 +163,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Intent intent = new Intent(this,QrReader.class);
             startActivity(intent);
         }
+    }
+    public void toBlink() {
+        Button button = (Button) findViewById(R.id.signin_button);
+                Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink);
+                button.startAnimation(animation);
+
     }
 }

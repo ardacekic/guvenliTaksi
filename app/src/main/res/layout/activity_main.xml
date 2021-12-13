@@ -4,52 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8AFF699B"
+    android:background="@drawable/login_background"
     android:backgroundTintMode="src_atop"
     >
 
     <EditText
         android:id="@+id/password_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:ems="10"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="32dp"
+        android:drawableStart="@drawable/ic_password"
+        android:drawablePadding="12dp"
+        android:paddingStart="12dp"
+        android:background="@drawable/edittext_password"
         android:hint="Şifre"
         android:inputType="textPassword"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username_text" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="391dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="144dp"
-        android:fontFamily="casual"
-        android:text="morTAKSI"
-        android:textAlignment="center"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.589"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/username_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:ems="10"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="360dp"
+        android:background="@drawable/edittext_email"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="12dp"
+        android:paddingStart="12dp"
         android:hint="Kullanıcı Adı"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/login_button"
@@ -67,28 +58,28 @@
 
     <Button
         android:id="@+id/signin_button"
-        android:layout_width="109dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="#57E11616"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="273dp"
+        android:layout_marginLeft="165dp"
         android:text="KAYIT OL"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:textColor="@color/RedAlert"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_text"
-        app:layout_constraintVertical_bias="0.456" />
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        />
 
     <Button
         android:id="@+id/deneme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="168dp"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fragment_container"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_container" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/to_qr"

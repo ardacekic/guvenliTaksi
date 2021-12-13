@@ -23,6 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MapsApp"
         android:usesCleartextTraffic="true">
+        <activity android:name=".SplashScreen"
+            android:exported="true"/>
         <activity
             android:name=".FileManager"
             android:exported="false" />

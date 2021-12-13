@@ -5,54 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RecorderActivity">
+
     <fragment
         android:id="@+id/map2"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="408dp"
-        android:layout_height="260dp"
+        android:layout_height="630dp"
         android:layout_marginTop="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <RelativeLayout
+        android:id="@+id/driving_layout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/bottom_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/text_record_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="324dp"
-        android:text="PRESS BUTTON TO RECORD"
+        android:layout_marginBottom="120dp"
+        android:layout_marginLeft="20dp"
+        android:text="İYİ YOLCULUKLAR"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Chronometer
         android:id="@+id/record_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="182dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="130dp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_record_1" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <ImageButton
+    <Button
+        android:background="@drawable/bottom_dark"
         android:id="@+id/record_btn"
         android:layout_width="88dp"
         android:layout_height="83dp"
-        android:layout_marginStart="147dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="147dp"
-        android:layout_marginBottom="102dp"
+        android:layout_marginBottom="30dp"
         android:backgroundTint="#00000000"
         android:scaleType="fitStart"
-        android:src="@android:drawable/presence_audio_busy"
+        android:src="@android:drawable/divider_horizontal_dark"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/record_timer"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_recording"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:lottie_rawRes="@raw/recording_animation"
+        app:lottie_loop="true"
+        app:layout_constraintBottom_toBottomOf="@id/record_btn"
+        app:layout_constraintTop_toTopOf="@id/record_btn"
+        app:layout_constraintStart_toStartOf="@id/record_btn"
+        app:layout_constraintEnd_toEndOf="@id/record_btn"/>
 
     <TextView
         android:id="@+id/node_name"
@@ -88,10 +108,11 @@
         android:id="@+id/go_records"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
         android:text="Button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/record_btn" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

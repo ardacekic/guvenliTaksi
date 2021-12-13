@@ -41,9 +41,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        filter = findViewById(R.id.textView);
 
-        show_nearestTaxi = findViewById(R.id.nearest_Taxi_Button);
+
+
         show_nearestTaxi.setOnClickListener(this);
 
         call_Taxi_Button = findViewById(R.id.call_Taxi_Button);

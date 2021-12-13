@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,7 +44,7 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
     protected LocationListener locationListener;
     protected Double latitude,longitude;
     private String node_name,leaf_name,plate_name;
-    private ImageButton record_btn;
+    //private ImageButton record_btn;
     private boolean isRecording = false;
     private String recordPermisson = Manifest.permission.RECORD_AUDIO;
     private MediaRecorder mediaRecorder;
@@ -50,6 +52,14 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
     private Chronometer recordTimer;
     private TextView node,leaf,plate;
     private Button list;
+    boolean nowRecording = false;
+    private Button record_btn;
+    LottieAnimationView lottie;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -71,10 +81,12 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
         list = findViewById(R.id.go_records);
         list.setOnClickListener(this);
         recordTimer = findViewById(R.id.record_timer);
+        lottie = findViewById(R.id.lottie_recording);
 
         node.setText(node_name);
         leaf.setText(leaf_name);
         plate.setText(plate_name);
+        checkPermisson();
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -116,10 +128,13 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
                 if(isRecording){
                     //TODO YANMAYAN MIC ILE DEGISTIRME FONCSIYONU GELCEK CUNKU RECORDAN ÇIKILACAK
                     stopRecording();
+                    lottie.cancelAnimation();
                     isRecording = false;
                 }else{
                     checkPermisson();
                     //TODO IF Lİ YAP
+
+                    lottie.playAnimation();
                     startRecording();
                     //TODO YANAR DONERLI MIC ILE DEGISTIRME FONCSIYONU GELCEK CUNKU RECORDA BAŞLANDI
                     isRecording = true;
