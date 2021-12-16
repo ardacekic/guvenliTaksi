@@ -44,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-        show_nearestTaxi.setOnClickListener(this);
+//        show_nearestTaxi.setOnClickListener(this);
 
         call_Taxi_Button = findViewById(R.id.call_Taxi_Button);
         call_Taxi_Button.setText(message_intent);

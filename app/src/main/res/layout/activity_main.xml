@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@drawable/login_background_new"
     android:backgroundTintMode="src_atop"
     >
 
@@ -12,7 +12,7 @@
         android:id="@+id/password_text"
         android:layout_width="350dp"
         android:layout_height="45dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="30dp"
         android:drawableStart="@drawable/ic_password"
         android:drawablePadding="12dp"
         android:paddingStart="12dp"
@@ -29,7 +29,7 @@
         android:id="@+id/username_text"
         android:layout_width="350dp"
         android:layout_height="45dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="380dp"
         android:background="@drawable/edittext_email"
         android:drawableStart="@drawable/ic_email"
         android:drawablePadding="12dp"
@@ -46,10 +46,10 @@
         android:id="@+id/login_button"
         android:layout_width="117dp"
         android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="#79E11616"
-        android:drawableBottom="@android:drawable/btn_star_big_on"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/button_giris"
         android:text="GIRIS"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,8 +60,8 @@
         android:id="@+id/signin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="273dp"
-        android:layout_marginLeft="165dp"
+        android:layout_marginTop="316dp"
+        android:layout_marginLeft="130dp"
         android:text="KAYIT OL"
         android:textStyle="bold"
         android:textSize="15dp"
@@ -71,24 +71,29 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         />
 
-    <Button
-        android:id="@+id/deneme"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="168dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/to_qr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="151dp"
-        android:layout_marginTop="18dp"
-        android:text="qr"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="10dp"
+        android:text="Hesabınız yok mu?"
+        app:layout_constraintEnd_toStartOf="@+id/signin_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deneme" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MERHABA"
+        android:textColor="@color/DarkMain"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

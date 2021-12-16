@@ -9,10 +9,11 @@
     <Button
         android:id="@+id/call_Taxi_Button"
         android:layout_width="140dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="25dp"
         android:text="Taksi Çağır"
-        map:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/button_taxicall"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintBottom_toBottomOf="parent" />
 
@@ -20,24 +21,28 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="630dp"
-        android:layout_marginTop="0dp"
+        android:layout_height="690dp"
         map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         tools:context=".MapsActivity" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="230dp"
         map:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/bottom_dark"
+        android:background="@drawable/bottom_dark_new"
         />
 
 
     <Button
         android:id="@+id/taxi_come_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="60dp"
+        android:background="@drawable/button_taxicome"
         android:text="Taksi Geldi"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintStart_toEndOf="@id/call_Taxi_Button"

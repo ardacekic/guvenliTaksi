@@ -2,6 +2,8 @@ package com.example.mapsapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -48,12 +50,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         signin_button = findViewById(R.id.signin_button);
         signin_button.setOnClickListener(this);
 
-        deneme = findViewById(R.id.deneme);
-        deneme.setOnClickListener(this);
-
-        qr_btn = findViewById(R.id.to_qr);
-        qr_btn.setOnClickListener(this);
-
         username_text = findViewById(R.id.username_text);
         password_text = findViewById(R.id.password_text);
     }
@@ -93,6 +89,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     if(message.equals("false")){
                         openUserMainScreen();
                     }else{
+                       showAlert();
                         Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -116,6 +113,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
         };
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
+
+    private void showAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //TODO GO TO FILE MANAGER
+                Intent intent = new Intent(getApplicationContext(),FileManager.class);
+                startActivity(intent);
+
+            }
+        });
+        alertDialog.setNegativeButton("Hayır",null);
+        alertDialog.setTitle("Kayıt Halen Sürmekte");
+        alertDialog.setMessage("Kayıtı Durdurmak İster Misiniz?");
+        alertDialog.create().show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -154,14 +170,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.i("click","clicked");
             //TODO LOGIN HANDSHAKE WILL BE HERE
             loginUser();
-        }else if(v == signin_button){
+        }else if(v == signin_button) {
             openRegisterScreen();
-        }else if(v== deneme){
-            Intent intent = new Intent(this,RecorderActivity.class);
-            startActivity(intent);
-        }else if(v ==qr_btn){
-            Intent intent = new Intent(this,QrReader.class);
-            startActivity(intent);
         }
     }
     public void toBlink() {
