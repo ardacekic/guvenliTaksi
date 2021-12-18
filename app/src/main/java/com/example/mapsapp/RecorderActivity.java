@@ -56,10 +56,6 @@ public class RecorderActivity extends AppCompatActivity  implements OnMapReadyCa
     private Button record_btn;
     LottieAnimationView lottie;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

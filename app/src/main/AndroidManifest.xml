@@ -24,7 +24,13 @@
         android:theme="@style/Theme.MapsApp"
         android:usesCleartextTraffic="true">
         <activity android:name=".SplashScreen"
-            android:exported="true"/>
+            android:exported="true">
+        <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".FileManager"
             android:exported="false" />
@@ -44,11 +50,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

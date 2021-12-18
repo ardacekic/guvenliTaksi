@@ -1,5 +1,7 @@
 package com.example.mapsapp;
 
+import static com.example.mapsapp.Constants.URL_GetAllTaksiInfo;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -11,20 +13,40 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.example.mapsapp.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,LocationListener,View.OnClickListener {
 
@@ -37,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView filter;
     public boolean clicked = false;
     public String message_intent="Taksi Çağır";
+    ArrayList<TaksiData> Taxies_users = new ArrayList<TaksiData>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         taxi_come_Button = findViewById(R.id.taxi_come_Button);
         taxi_come_Button.setOnClickListener(this);
-
+        startTimer();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -61,7 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         //mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14.0f) );
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -116,6 +138,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
         Log.i("TAG", "onRestart: ");
+    }
+
+    private void startTimer() {
+        new CountDownTimer(20000, 1000){
+            public void onTick(long millisUntilFinished){
+
+            }
+            public  void onFinish(){
+                updateMap(); startTimer();
+            }
+        }.start();
+    }
+
+    private void updateMap() {
+
+            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, URL_GetAllTaksiInfo, null,
+                    new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // display response
+
+                            try {
+                                Log.d("Response", (response.getString("message")).toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                String message = response.getString("message").toString();
+                                Type type = new TypeToken<ArrayList<TaksiData>>(){}.getType();
+                                Taxies_users = new Gson().fromJson(message,type);
+                                showOnMap();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("taksi_user",Taxies_users.get(1).getUsername());
+
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Error.Response", "response");
+                        }
+                    }
+            );
+        RequestHandler.getInstance(this).addToRequestQueue(getRequest);
+    }
+
+    private void showOnMap() {
+        for (TaksiData t: Taxies_users) {
+            LatLng first = new LatLng(Double.valueOf(t.getLat()), Double.valueOf(t.getLon()));
+            mMap.addMarker(new MarkerOptions().position(first));
+            Log.d("taksi_idea",t.getUsername() + t.getLat() + t.getLon());
+        }
+
     }
 
     @Override
