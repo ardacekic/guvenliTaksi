@@ -1,13 +1,15 @@
 package com.example.mapsapp;
 
 public class TaksiData {
+    private String id;
     private String username;
     private String lat;
     private String lon;
     private String plate_num;
     private String station_name;
 
-    public TaksiData(String username, String lat, String lon, String plate_num, String station_name) {
+    public TaksiData(String id, String username, String lat, String lon, String plate_num, String station_name) {
+        this.id = id;
         this.username = username;
         this.lat = lat;
         this.lon = lon;
@@ -17,6 +19,14 @@ public class TaksiData {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {

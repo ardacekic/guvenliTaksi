@@ -7,5 +7,6 @@ public class Constants {
     public static final String URL_REGISTER = ROOT_URL + "registerUser.php";
     public static final String URL_LOGIN = ROOT_URL + "loginUser.php";
     public static final String URL_GetAllTaksiInfo = ROOT_URL + "getAllTaksi.php";
+    public static final String URL_Request_data = ROOT_URL + "request_data_fromUser.php";
 
 }

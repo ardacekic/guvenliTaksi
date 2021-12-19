@@ -46,7 +46,6 @@ public class QrReader extends AppCompatActivity {
                             String name_node = jsonObject.getString("name_node");
                             String name_leaf = jsonObject.getString("name_leaf");
                             String plate = jsonObject.getString("plate");
-
                             Intent intent = new Intent(getApplicationContext(),RecorderActivity.class);
                             intent.putExtra(EXTRA_INFO_NODE,name_node);
                             intent.putExtra(EXTRA_INFO_LEAF,name_leaf);

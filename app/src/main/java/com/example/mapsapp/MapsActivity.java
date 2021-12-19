@@ -1,6 +1,7 @@
 package com.example.mapsapp;
 
 import static com.example.mapsapp.Constants.URL_GetAllTaksiInfo;
+import static com.example.mapsapp.Constants.URL_Request_data;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.example.mapsapp.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -59,16 +61,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView filter;
     public boolean clicked = false;
     public String message_intent="Taksi Çağır";
+    public String Clicked_Taxi = "";
+    public boolean Clicked_to_marker = false;
+    public String Taksi_id,lat_user,lon_user,time_user = "";
     ArrayList<TaksiData> Taxies_users = new ArrayList<TaksiData>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-
-
-//        show_nearestTaxi.setOnClickListener(this);
-
         call_Taxi_Button = findViewById(R.id.call_Taxi_Button);
         call_Taxi_Button.setText(message_intent);
         call_Taxi_Button.setOnClickListener(this);
@@ -84,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        updateMap();
         //mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14.0f) );
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -99,12 +100,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Clicked_to_marker = true;
+                //TODO: YEŞİL YANIP SÖNEN BİŞİ YAP Kİ ANLAYALIM TAKSİYİ İSTİYOZ >> TAKSİ ÇAĞIR BUTONUNU
+                //TODO: TAKSİ SİMGESİNİ Bİ TIK BÜYÜTEBİLİRİZ HER TIKLANANA
+                String markerTitle = marker.getTitle();
+                Taksi_id = marker.getTag().toString();
+                Log.i("MarkerClick", markerTitle);
+                Clicked_Taxi = markerTitle;
+                return false;
+            }
+        });
     }
     @Override
     public void onLocationChanged(Location location) {
         //TODO: ADAM ELLEDİYSE DAHA BOZMA ZEVKİNİ ÖYLE KALSIN ZOOM AQ
         latitude  = location.getLatitude();
         longitude = location.getLongitude();
+        lat_user = latitude.toString();
+        lon_user = longitude.toString();
+        time_user = String.valueOf((location.getTime()));
         mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f) );
     }
 
@@ -126,7 +144,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 clicked = false;
             }
         }else if (v == call_Taxi_Button){
-
+                //TODO: ADAMIN VALİD BİTİNİ 0 A ÇEK MİLLET GÖRMESİN
+                //TODO: Taksici uygulması kendi bitini 0 gördüğünde ekrana kullanıcın gps noktası gelsin. Kabul ederse accepted biti kullanıcının 1 olsun etmezse 0 olsun
+                //TODO: Kullanıcı travel bilgilerini tutacak bir table oluşturmak gerek
+            startAnimationLoader(); // animasyon girsin abi bekleniyor filan yazsın cancel lama özelliğini ekleriz sonra
+            closeAllMarkers();
+            updateTaksiTable();
+            updateUserGPSTable();
+            startAcceptTimer(); //HEM Kabuletme için hem de yeniden çağırabilmek için kullanılcak olan timerı açacak 2şer aralıklarla totalde 10 snye bakılacak
         }else if(v == taxi_come_Button){
             Log.i("resultintent", "onClick ");
             Intent intent_qrReader = new Intent(this,QrReader.class);
@@ -134,10 +159,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i("TAG", "onRestart: ");
+    private void startAnimationLoader() {
+    }
+
+    private void closeAllMarkers() {
+        mMap.clear();
+    }
+
+    private void startAcceptTimer() {
+        new CountDownTimer(10000, 2000){
+            public void onTick(long millisUntilFinished){
+                closeAllMarkers(); // sürekli temizle userlar görmesin elaman çağırılırken
+                //Her 2 sn de bir taksici kabuletmiş mi bak
+                //taksici kabul ederse TAKSİ YOLDA MESAJIMIZ OLSUN! VE Taksi Çağır butonumuz inaktive olsun.
+            }
+            public  void onFinish(){
+                //Eğer timer sonunda kabul etmemişse markerları yeniden aç
+
+            }
+        }.start();
+    }
+
+    private void updateUserGPSTable() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Request_data, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message  = jsonObject.getString("error");
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    if(message.equals("false")){
+
+                    }else{
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error","psam error");
+                Log.i("error2",error.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("taksi_id",Taksi_id);
+                params.put("user_id","1");
+                params.put("lat",lat_user);
+                params.put("lon",lon_user);
+                params.put("time",time_user);
+                params.put("status","1");
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+    private void updateTaksiTable() {
     }
 
     private void startTimer() {
@@ -152,7 +232,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void updateMap() {
-
             JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, URL_GetAllTaksiInfo, null,
                     new Response.Listener<JSONObject>()
                     {
@@ -192,10 +271,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void showOnMap() {
         for (TaksiData t: Taxies_users) {
             LatLng first = new LatLng(Double.valueOf(t.getLat()), Double.valueOf(t.getLon()));
-            mMap.addMarker(new MarkerOptions().position(first));
+            Marker m = mMap.addMarker(new MarkerOptions().position(first).title(t.getPlate_num()));
+            m.setTag(t.getId());
             Log.d("taksi_idea",t.getUsername() + t.getLat() + t.getLon());
         }
-
     }
 
     @Override
@@ -210,10 +289,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 call_Taxi_Button.setText(name_leaf);
                 show_nearestTaxi.setText(name_node);
                 taxi_come_Button.setText(plate);
-
-                //artık filtre özelliği kapanacak ve ses kaydı özelliği açılacak
                 filter.setVisibility(View.INVISIBLE);
-                //TODO: FRONT-END HAZIRLANINCA BURAYI RESULT OLARAK DÖNDÜRÜCEZ DEBUG İÇİN YETERLİ
             }else {
 
             }
