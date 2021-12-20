@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -62,8 +64,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public boolean clicked = false;
     public String message_intent="Taksi Çağır";
     public String Clicked_Taxi = "";
-    public boolean Clicked_to_marker = false;
-    public String Taksi_id,lat_user,lon_user,time_user = "";
+    public boolean Clicked_to_marker,cevapDondu = false;
+    public String Taksi_id,lat_user,lon_user,time_user,time_whichSend,Taksi_Status = "";
+    double reS;
     ArrayList<TaksiData> Taxies_users = new ArrayList<TaksiData>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +152,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //TODO: Kullanıcı travel bilgilerini tutacak bir table oluşturmak gerek
             startAnimationLoader(); // animasyon girsin abi bekleniyor filan yazsın cancel lama özelliğini ekleriz sonra
             closeAllMarkers();
-            updateTaksiTable();
             updateUserGPSTable();
             startAcceptTimer(); //HEM Kabuletme için hem de yeniden çağırabilmek için kullanılcak olan timerı açacak 2şer aralıklarla totalde 10 snye bakılacak
         }else if(v == taxi_come_Button){
@@ -163,24 +165,110 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void closeAllMarkers() {
-        mMap.clear();
+        //mMap.clear();
     }
 
     private void startAcceptTimer() {
+        //TODO: ALERT VİEW ÇIKAR
         new CountDownTimer(10000, 2000){
             public void onTick(long millisUntilFinished){
-                closeAllMarkers(); // sürekli temizle userlar görmesin elaman çağırılırken
-                //Her 2 sn de bir taksici kabuletmiş mi bak
-                //taksici kabul ederse TAKSİ YOLDA MESAJIMIZ OLSUN! VE Taksi Çağır butonumuz inaktive olsun.
+                // TODO SORGU AT STATUS BİLGİNİ BAK
+                if(!cevapDondu){
+                    doesTaksiAccepted();
+                }
             }
             public  void onFinish(){
                 //Eğer timer sonunda kabul etmemişse markerları yeniden aç
+                if(!cevapDondu){
+                    startAcceptTimer();
+                }
 
             }
         }.start();
     }
 
+    private void popClicled() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Yolculuk Başlıyor")
+                .setMessage("Taksin Yolda AMın Oğlu")
+                .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+    }
+    private void popClicledNeg() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Reddedildin")
+                .setMessage("Ağla")
+                .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+    }
+
+
+    private void doesTaksiAccepted() {
+        Log.i("resAL2", time_whichSend);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_Does_Taksi_Accepted, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message  = jsonObject.getString("error");
+                    Log.i("resAL23333", message);
+                    Taksi_Status= jsonObject.getJSONObject("message").getString("status");
+                    Log.i("resAL233334", Taksi_Status);
+                    if(message.equals("false")){
+                        Taksi_Status= jsonObject.getJSONObject("message").getString("status");
+                        reS = Double.valueOf(Taksi_Status);
+                        if (Taksi_Status.equals("2")){
+                            cevapDondu=true;
+                            Log.d("arrar",Taksi_Status );
+                            popClicled();
+                        }else if(Taksi_Status.equals("3")){
+                            cevapDondu=true;
+                            Log.d("arrar222",Taksi_Status );
+                            popClicledNeg();
+                        }else{
+                            //bekle aq
+                        }
+                        Log.i("res", Taksi_Status);
+                    }else{
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error","psam error");
+                Log.i("error2",error.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("taksi_id",Taksi_id);
+                params.put("user_id","1");
+                params.put("time",time_whichSend);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
     private void updateUserGPSTable() {
+        time_whichSend = time_user;
+        Log.i("resAL", time_whichSend);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Request_data, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -210,23 +298,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 params.put("user_id","1");
                 params.put("lat",lat_user);
                 params.put("lon",lon_user);
-                params.put("time",time_user);
+                params.put("time",time_whichSend);
                 params.put("status","1");
                 return params;
             }
         };
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
-    private void updateTaksiTable() {
-    }
 
     private void startTimer() {
         new CountDownTimer(20000, 1000){
             public void onTick(long millisUntilFinished){
-
+                updateMap();
             }
             public  void onFinish(){
-                updateMap(); startTimer();
+                 startTimer();
             }
         }.start();
     }
@@ -253,7 +339,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Log.d("taksi_user",Taxies_users.get(1).getUsername());
+
 
                         }
                     },
