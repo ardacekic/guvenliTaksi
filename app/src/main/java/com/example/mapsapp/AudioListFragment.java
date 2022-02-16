@@ -41,7 +41,6 @@ public class AudioListFragment extends Fragment implements AudioListAdapter.onIt
     private MediaPlayer mediaPlayer = null;
     private boolean isPlaying = false;
     private  File filetoPlay = null;
-
     private ImageButton playBtn;
     private TextView playerHeader,playerFilename;
     private SeekBar playerSeekbar;

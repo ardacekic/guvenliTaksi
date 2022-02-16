@@ -10,7 +10,6 @@ public class FileManager extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_manager);
-        ///storage/emulated/0/Android/data/com.example.mapsapp/files
 
     }
 }

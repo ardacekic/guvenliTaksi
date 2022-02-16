@@ -1,13 +1,19 @@
 package com.example.mapsapp;
 
+import static com.example.mapsapp.Constants.URL_GetAllTaksiInfo;
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,11 +23,16 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,28 +40,26 @@ import java.util.Map;
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button login_button,signin_button,deneme,qr_btn;
     private EditText username_text,password_text;
-
+    UserInfo userInfo = new UserInfo();
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private static final int MY_ACCESS_COARSE_LOCATION_CODE = 200;
     private static final int MY_ACCESS_FINE_LOCATION_CODE = 300;
     private static final int MY_ACCESS_BACKGROUND_LOCATION_CODE = 400;
+    String user_id_string = "";
+    String username = "";
+    String password = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         checkPermissons();
+
         login_button = findViewById(R.id.login_button);
         login_button.setOnClickListener(this);
-
+        toBlink();
         signin_button = findViewById(R.id.signin_button);
         signin_button.setOnClickListener(this);
-
-        deneme = findViewById(R.id.deneme);
-        deneme.setOnClickListener(this);
-
-        qr_btn = findViewById(R.id.to_qr);
-        qr_btn.setOnClickListener(this);
 
         username_text = findViewById(R.id.username_text);
         password_text = findViewById(R.id.password_text);
@@ -75,11 +84,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
     private void openUserMainScreen() {
         Intent intent_userscreen = new Intent(this,MapsActivity.class);
+        intent_userscreen.putExtra("user_id",user_id_string);
         startActivity(intent_userscreen);
     }
     private void loginUser() {
-        final String username = username_text.getText().toString().trim();
-        final String password = password_text.getText().toString().trim();
         Log.i("loginuser",Constants.URL_LOGIN);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_LOGIN, new Response.Listener<String>() {
             @Override
@@ -89,8 +97,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     String message  = jsonObject.getString("error");
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     if(message.equals("false")){
+                        updateTokenUser();
                         openUserMainScreen();
                     }else{
+                       showAlert();
                         Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -114,6 +124,61 @@ public class MainActivity extends Activity implements View.OnClickListener {
         };
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
+
+    private void updateTokenUser() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_Get_User_ID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message  = jsonObject.getString("error");
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    if(message.equals("false")){
+                        user_id_string = jsonObject.getJSONObject("message").getString("id");
+                        Log.d("user_id",user_id_string);
+                    }else{
+                        showAlert();
+                        Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error","psam error");
+                Log.i("error2",error.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("username", username);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    private void showAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //TODO GO TO FILE MANAGER
+                Intent intent = new Intent(getApplicationContext(),FileManager.class);
+                startActivity(intent);
+
+            }
+        });
+        alertDialog.setNegativeButton("Hayır",null);
+        alertDialog.setTitle("Kayıt Halen Sürmekte");
+        alertDialog.setMessage("Kayıtı Durdurmak İster Misiniz?");
+        alertDialog.create().show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -151,15 +216,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(v == login_button){;
             Log.i("click","clicked");
             //TODO LOGIN HANDSHAKE WILL BE HERE
+            username = username_text.getText().toString().trim();
+            password = password_text.getText().toString().trim();
             loginUser();
-        }else if(v == signin_button){
+        }else if(v == signin_button) {
             openRegisterScreen();
-        }else if(v== deneme){
-            Intent intent = new Intent(this,RecorderActivity.class);
-            startActivity(intent);
-        }else if(v ==qr_btn){
-            Intent intent = new Intent(this,QrReader.class);
-            startActivity(intent);
         }
+    }
+    public void toBlink() {
+        Button button = (Button) findViewById(R.id.signin_button);
+                Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink);
+                button.startAnimation(animation);
+
     }
 }
