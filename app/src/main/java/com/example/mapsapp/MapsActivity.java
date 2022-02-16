@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,14 +34,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.example.mapsapp.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,7 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,LocationListener,View.OnClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,LocationListener,View.OnClickListener,TaskLoadedCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
@@ -65,20 +66,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public String message_intent="Taksi Çağır";
     public String Clicked_Taxi = "";
     public boolean Clicked_to_marker,cevapDondu = false;
-    public String Taksi_id,lat_user,lon_user,time_user,time_whichSend,Taksi_Status = "";
+    public String Taksi_id,lat_user,lon_user,time_user,time_whichSend,Taksi_Status,user_id = "";
+    public String taksi_lat="";
+    public String taksi_lon="";
     double reS;
+    public boolean cevap_evet = false;
+    AlertDialog dialog;
+    Polyline currentpolyline;
+    private MarkerOptions place1, place2;
+    String lat_taksi,lon_taksi;
     ArrayList<TaksiData> Taxies_users = new ArrayList<TaksiData>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Intent intent =getIntent();
+        user_id = intent.getStringExtra("user_id");
         call_Taxi_Button = findViewById(R.id.call_Taxi_Button);
         call_Taxi_Button.setText(message_intent);
         call_Taxi_Button.setOnClickListener(this);
 
         taxi_come_Button = findViewById(R.id.taxi_come_Button);
         taxi_come_Button.setOnClickListener(this);
-        startTimer();
+        taxi_come_Button.setText(user_id);
+        if(!cevap_evet)
+            startTimer();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -87,7 +99,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        updateMap();
+        //updateMap();
+
         //mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14.0f) );
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -150,18 +163,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //TODO: ADAMIN VALİD BİTİNİ 0 A ÇEK MİLLET GÖRMESİN
                 //TODO: Taksici uygulması kendi bitini 0 gördüğünde ekrana kullanıcın gps noktası gelsin. Kabul ederse accepted biti kullanıcının 1 olsun etmezse 0 olsun
                 //TODO: Kullanıcı travel bilgilerini tutacak bir table oluşturmak gerek
+            getShortest();
             startAnimationLoader(); // animasyon girsin abi bekleniyor filan yazsın cancel lama özelliğini ekleriz sonra
             closeAllMarkers();
             updateUserGPSTable();
             startAcceptTimer(); //HEM Kabuletme için hem de yeniden çağırabilmek için kullanılcak olan timerı açacak 2şer aralıklarla totalde 10 snye bakılacak
         }else if(v == taxi_come_Button){
             Log.i("resultintent", "onClick ");
-            Intent intent_qrReader = new Intent(this,QrReader.class);
-            startActivity(intent_qrReader);
+            //Intent intent_qrReader = new Intent(this,QrReader.class);
+
+            //startActivity(intent_qrReader);
+            place1 = new MarkerOptions().position(new LatLng(39.8004, 32.8106)).title("Location 1");
+            place2 = new MarkerOptions().position(new LatLng(39.9004, 32.8106)).title("Location 2");
+            String url = (getUrl(place1.getPosition(), place2.getPosition(), "driving"));
+            new FetchURL(MapsActivity.this).execute(url, "driving");
+
         }
     }
 
+    private void getShortest() {
+
+    }
+
     private void startAnimationLoader() {
+        loadingDialog();
     }
 
     private void closeAllMarkers() {
@@ -169,10 +194,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void startAcceptTimer() {
-        //TODO: ALERT VİEW ÇIKAR
-        new CountDownTimer(10000, 2000){
+                //TODO: ALERT VİEW ÇIKAR
+        new CountDownTimer(10000, 1000){
             public void onTick(long millisUntilFinished){
-                // TODO SORGU AT STATUS BİLGİNİ BAK
+                //TODO SORGU AT STATUS BİLGİNİ BAK
                 if(!cevapDondu){
                     doesTaksiAccepted();
                 }
@@ -180,22 +205,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public  void onFinish(){
                 //Eğer timer sonunda kabul etmemişse markerları yeniden aç
                 if(!cevapDondu){
-                    startAcceptTimer();
+                    //startAcceptTimer();
+                    cevapVerilmediPop();
                 }
 
             }
         }.start();
     }
 
-    private void popClicled() {
+    private void cevapVerilmediPop() {
+        dialog.dismiss();
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Yolculuk Başlıyor")
-                .setMessage("Taksin Yolda AMın Oğlu")
+                .setTitle("Cevap Verilmedi!")
+                .setMessage("Yeni Taksi Ara")
                 .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                    }
+                })
+                .show();
+    }
+
+    private void popClicled() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Yolculuk Başlıyor")
+                .setMessage("Taksin Yolda...")
+                .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //startTimer();
+                        getTaksiGpsStatus();
                     }
                 })
                 .show();
@@ -204,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Reddedildin")
-                .setMessage("Ağla")
+                .setMessage("Yeniden Ara")
                 .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -212,6 +254,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 })
                 .show();
+    }
+
+    private void loadingDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.costum_dialog, null));
+        builder.setCancelable(true);
+        dialog=builder.create();
+        dialog.show();
+
+    }
+    private void dismissDialog(){
+        dialog.dismiss();
     }
 
 
@@ -231,11 +287,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         reS = Double.valueOf(Taksi_Status);
                         if (Taksi_Status.equals("2")){
                             cevapDondu=true;
+                            dismissDialog();
                             Log.d("arrar",Taksi_Status );
+                            cevap_evet=true;
                             popClicled();
                         }else if(Taksi_Status.equals("3")){
                             cevapDondu=true;
+                            dismissDialog();
                             Log.d("arrar222",Taksi_Status );
+                            cevap_evet=false;
                             popClicledNeg();
                         }else{
                             //bekle aq
@@ -309,10 +369,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void startTimer() {
         new CountDownTimer(20000, 1000){
             public void onTick(long millisUntilFinished){
+                if(cevap_evet)
+                    onFinish();
                 updateMap();
+                getShortest();
             }
             public  void onFinish(){
-                 startTimer();
+                if(!cevap_evet)
+                startTimer();
             }
         }.start();
     }
@@ -355,12 +419,80 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showOnMap() {
+        //TODO: CHANGE THESE OF GEOLOCATİON
+        mMap.clear();
         for (TaksiData t: Taxies_users) {
             LatLng first = new LatLng(Double.valueOf(t.getLat()), Double.valueOf(t.getLon()));
             Marker m = mMap.addMarker(new MarkerOptions().position(first).title(t.getPlate_num()));
             m.setTag(t.getId());
             Log.d("taksi_idea",t.getUsername() + t.getLat() + t.getLon());
         }
+    }
+    private void getTaksiGpsStatus(){
+        //get distance between taksi and user in this function with timer!
+        mMap.clear();
+        getComingTaksiData();
+        cevap_evet=true;
+        place1 = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Location 1");
+        place2 = new MarkerOptions().position(new LatLng(latitude, 32.90)).title("Location 2");
+        String url = (getUrl(place1.getPosition(), place2.getPosition(), "driving"));
+        new FetchURL(MapsActivity.this).execute(url, "driving");
+
+    }
+
+    private void getComingTaksiData() {
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, Constants.URL_GetComingTaksiInfo, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // display response
+
+                        try {
+                            Log.d("Response", (response.getString("message")).toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            String message = response.getString("message").toString();
+                            Type type = new TypeToken<ArrayList<TaksiData>>(){}.getType();
+                            Taxies_users = new Gson().fromJson(message,type);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", "response");
+                    }
+                }
+        );
+        RequestHandler.getInstance(this).addToRequestQueue(getRequest);
+
+    }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + "AIzaSyD8JD6sSJPMmQRBCV_AgQTc77vN_080vk4";
+        Log.d("directionapi",url);
+        return url;
     }
 
     @Override
@@ -380,5 +512,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         }
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentpolyline != null)
+            currentpolyline.remove();
+        currentpolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 }
